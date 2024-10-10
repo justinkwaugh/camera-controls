@@ -44,6 +44,7 @@ export const ACTION = Object.freeze( {
 	TOUCH_ZOOM_TRUCK: 8192,
 	TOUCH_ZOOM_OFFSET: 16384,
 	TOUCH_ZOOM_ROTATE: 32768,
+	TOUCH_CUSTOM: 65536,
 } as const );
 
 // Bit OR of Action

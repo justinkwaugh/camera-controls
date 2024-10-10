@@ -922,7 +922,8 @@ export class CameraControls extends EventDispatcher {
 				( this._state & ACTION.ROTATE ) === ACTION.ROTATE ||
 				( this._state & ACTION.TOUCH_ROTATE ) === ACTION.TOUCH_ROTATE ||
 				( this._state & ACTION.TOUCH_DOLLY_ROTATE ) === ACTION.TOUCH_DOLLY_ROTATE ||
-				( this._state & ACTION.TOUCH_ZOOM_ROTATE ) === ACTION.TOUCH_ZOOM_ROTATE
+				( this._state & ACTION.TOUCH_ZOOM_ROTATE ) === ACTION.TOUCH_ZOOM_ROTATE ||
+				( this._state & ACTION.TOUCH_CUSTOM ) === ACTION.TOUCH_CUSTOM
 			) {
 
 				this._sphericalEnd.theta = this._spherical.theta;
@@ -936,7 +937,8 @@ export class CameraControls extends EventDispatcher {
 				( this._state & ACTION.TRUCK ) === ACTION.TRUCK ||
 				( this._state & ACTION.TOUCH_TRUCK ) === ACTION.TOUCH_TRUCK ||
 				( this._state & ACTION.TOUCH_DOLLY_TRUCK ) === ACTION.TOUCH_DOLLY_TRUCK ||
-				( this._state & ACTION.TOUCH_ZOOM_TRUCK ) === ACTION.TOUCH_ZOOM_TRUCK
+				( this._state & ACTION.TOUCH_ZOOM_TRUCK ) === ACTION.TOUCH_ZOOM_TRUCK ||
+				( this._state & ACTION.TOUCH_CUSTOM ) === ACTION.TOUCH_CUSTOM
 			) {
 
 				this._targetEnd.copy( this._target );
@@ -1014,6 +1016,11 @@ export class CameraControls extends EventDispatcher {
 
 			}
 
+			if ((this._state & ACTION.TOUCH_CUSTOM) === ACTION.TOUCH_CUSTOM) {
+				this._rotateInternal( deltaX, 0 );
+				this._isUserControllingRotate = true;
+			}
+
 			if (
 				( this._state & ACTION.DOLLY ) === ACTION.DOLLY ||
 				( this._state & ACTION.ZOOM ) === ACTION.ZOOM
@@ -1086,6 +1093,11 @@ export class CameraControls extends EventDispatcher {
 				this._truckInternal( deltaX, deltaY, false );
 				this._isUserControllingTruck = true;
 
+			}
+
+			if ( (this._state & ACTION.TOUCH_CUSTOM) === ACTION.TOUCH_CUSTOM ) {
+				this._truckInternal( 0, deltaY, false );
+				this._isUserControllingTruck = true;
 			}
 
 			if (
