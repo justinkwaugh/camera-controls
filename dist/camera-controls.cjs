@@ -32,7 +32,7 @@ const ACTION = Object.freeze({
     TOUCH_ZOOM_TRUCK: 8192,
     TOUCH_ZOOM_OFFSET: 16384,
     TOUCH_ZOOM_ROTATE: 32768,
-    TOUCH_CUSTOM: 65536,
+    CUSTOM: 65536,
 });
 const DOLLY_DIRECTION = {
     NONE: 0,
@@ -248,7 +248,7 @@ class EventDispatcher {
 }
 
 var _a;
-const VERSION = '0.0.0-semantic-release'; // will be replaced with `version` in package.json during the build process.
+const VERSION = "0.0.0-semantic-release"; // will be replaced with `version` in package.json during the build process.
 const TOUCH_DOLLY_FACTOR = 1 / 8;
 const isMac = /Mac/.test((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.navigator) === null || _a === void 0 ? void 0 : _a.platform);
 let THREE;
@@ -276,45 +276,45 @@ let _rotationMatrix;
 let _raycaster;
 class CameraControls extends EventDispatcher {
     /**
-     * Injects THREE as the dependency. You can then proceed to use CameraControls.
-     *
-     * e.g
-     * ```javascript
-     * CameraControls.install( { THREE: THREE } );
-     * ```
-     *
-     * Note: If you do not wish to use enter three.js to reduce file size(tree-shaking for example), make a subset to install.
-     *
-     * ```js
-     * import {
-     * 	Vector2,
-     * 	Vector3,
-     * 	Vector4,
-     * 	Quaternion,
-     * 	Matrix4,
-     * 	Spherical,
-     * 	Box3,
-     * 	Sphere,
-     * 	Raycaster,
-     * 	MathUtils,
-     * } from 'three';
-     *
-     * const subsetOfTHREE = {
-     * 	Vector2   : Vector2,
-     * 	Vector3   : Vector3,
-     * 	Vector4   : Vector4,
-     * 	Quaternion: Quaternion,
-     * 	Matrix4   : Matrix4,
-     * 	Spherical : Spherical,
-     * 	Box3      : Box3,
-     * 	Sphere    : Sphere,
-     * 	Raycaster : Raycaster,
-     * };
-
-     * CameraControls.install( { THREE: subsetOfTHREE } );
-     * ```
-     * @category Statics
-     */
+       * Injects THREE as the dependency. You can then proceed to use CameraControls.
+       *
+       * e.g
+       * ```javascript
+       * CameraControls.install( { THREE: THREE } );
+       * ```
+       *
+       * Note: If you do not wish to use enter three.js to reduce file size(tree-shaking for example), make a subset to install.
+       *
+       * ```js
+       * import {
+       * 	Vector2,
+       * 	Vector3,
+       * 	Vector4,
+       * 	Quaternion,
+       * 	Matrix4,
+       * 	Spherical,
+       * 	Box3,
+       * 	Sphere,
+       * 	Raycaster,
+       * 	MathUtils,
+       * } from 'three';
+       *
+       * const subsetOfTHREE = {
+       * 	Vector2   : Vector2,
+       * 	Vector3   : Vector3,
+       * 	Vector4   : Vector4,
+       * 	Quaternion: Quaternion,
+       * 	Matrix4   : Matrix4,
+       * 	Spherical : Spherical,
+       * 	Box3      : Box3,
+       * 	Sphere    : Sphere,
+       * 	Raycaster : Raycaster,
+       * };
+  
+       * CameraControls.install( { THREE: subsetOfTHREE } );
+       * ```
+       * @category Statics
+       */
     static install(libs) {
         THREE = libs.THREE;
         _ORIGIN = Object.freeze(new THREE.Vector3(0, 0, 0));
@@ -558,32 +558,40 @@ class CameraControls extends EventDispatcher {
                 // half of the fov is center to top of screen
                 const fov = this._camera.getEffectiveFOV() * DEG2RAD;
                 const targetDistance = offset.length() * Math.tan(fov * 0.5);
-                truckX = (this.truckSpeed * deltaX * targetDistance / this._elementRect.height);
-                pedestalY = (this.truckSpeed * deltaY * targetDistance / this._elementRect.height);
+                truckX =
+                    (this.truckSpeed * deltaX * targetDistance) / this._elementRect.height;
+                pedestalY =
+                    (this.truckSpeed * deltaY * targetDistance) / this._elementRect.height;
             }
             else if (isOrthographicCamera(this._camera)) {
                 const camera = this._camera;
-                truckX = deltaX * (camera.right - camera.left) / camera.zoom / this._elementRect.width;
-                pedestalY = deltaY * (camera.top - camera.bottom) / camera.zoom / this._elementRect.height;
+                truckX =
+                    (deltaX * (camera.right - camera.left)) /
+                        camera.zoom /
+                        this._elementRect.width;
+                pedestalY =
+                    (deltaY * (camera.top - camera.bottom)) /
+                        camera.zoom /
+                        this._elementRect.height;
             }
             else {
                 return;
             }
             if (this.verticalDragToForward) {
-                dragToOffset ?
-                    this.setFocalOffset(this._focalOffsetEnd.x + truckX, this._focalOffsetEnd.y, this._focalOffsetEnd.z, true) :
-                    this.truck(truckX, 0, true);
+                dragToOffset
+                    ? this.setFocalOffset(this._focalOffsetEnd.x + truckX, this._focalOffsetEnd.y, this._focalOffsetEnd.z, true)
+                    : this.truck(truckX, 0, true);
                 this.forward(-pedestalY, true);
             }
             else {
-                dragToOffset ?
-                    this.setFocalOffset(this._focalOffsetEnd.x + truckX, this._focalOffsetEnd.y + pedestalY, this._focalOffsetEnd.z, true) :
-                    this.truck(truckX, pedestalY, true);
+                dragToOffset
+                    ? this.setFocalOffset(this._focalOffsetEnd.x + truckX, this._focalOffsetEnd.y + pedestalY, this._focalOffsetEnd.z, true)
+                    : this.truck(truckX, pedestalY, true);
             }
         };
         this._rotateInternal = (deltaX, deltaY) => {
-            const theta = PI_2 * this.azimuthRotateSpeed * deltaX / this._elementRect.height; // divide by *height* to refer the resolution
-            const phi = PI_2 * this.polarRotateSpeed * deltaY / this._elementRect.height;
+            const theta = (PI_2 * this.azimuthRotateSpeed * deltaX) / this._elementRect.height; // divide by *height* to refer the resolution
+            const phi = (PI_2 * this.polarRotateSpeed * deltaY) / this._elementRect.height;
             this.rotate(theta, phi, true);
         };
         this._dollyInternal = (delta, x, y) => {
@@ -603,7 +611,8 @@ class CameraControls extends EventDispatcher {
                 this._dollyToNoClamp(clampedDistance, true);
             }
             if (this.dollyToCursor) {
-                this._changedDolly += (this.infinityDolly ? distance : clampedDistance) - lastDistance;
+                this._changedDolly +=
+                    (this.infinityDolly ? distance : clampedDistance) - lastDistance;
                 this._dollyControlCoord.set(x, y);
             }
             this._lastDollyDirection = Math.sign(-delta);
@@ -620,8 +629,8 @@ class CameraControls extends EventDispatcher {
             }
         };
         // Check if the user has installed THREE
-        if (typeof THREE === 'undefined') {
-            console.error('camera-controls: `THREE` is undefined. You must first run `CameraControls.install( { THREE: THREE } )`. Check the docs for further information.');
+        if (typeof THREE === "undefined") {
+            console.error("camera-controls: `THREE` is undefined. You must first run `CameraControls.install( { THREE: THREE } )`. Check the docs for further information.");
         }
         this._camera = camera;
         this._yAxisUpSpace = new THREE.Quaternion().setFromUnitVectors(this._camera.up, _AXIS_Y);
@@ -661,15 +670,19 @@ class CameraControls extends EventDispatcher {
             left: ACTION.ROTATE,
             middle: ACTION.DOLLY,
             right: ACTION.TRUCK,
-            wheel: isPerspectiveCamera(this._camera) ? ACTION.DOLLY :
-                isOrthographicCamera(this._camera) ? ACTION.ZOOM :
-                    ACTION.NONE,
+            wheel: isPerspectiveCamera(this._camera)
+                ? ACTION.DOLLY
+                : isOrthographicCamera(this._camera)
+                    ? ACTION.ZOOM
+                    : ACTION.NONE,
         };
         this.touches = {
             one: ACTION.TOUCH_ROTATE,
-            two: isPerspectiveCamera(this._camera) ? ACTION.TOUCH_DOLLY_TRUCK :
-                isOrthographicCamera(this._camera) ? ACTION.TOUCH_ZOOM_TRUCK :
-                    ACTION.NONE,
+            two: isPerspectiveCamera(this._camera)
+                ? ACTION.TOUCH_DOLLY_TRUCK
+                : isOrthographicCamera(this._camera)
+                    ? ACTION.TOUCH_ZOOM_TRUCK
+                    : ACTION.NONE,
             three: ACTION.TOUCH_TRUCK,
         };
         const dragStartPosition = new THREE.Vector2();
@@ -695,16 +708,21 @@ class CameraControls extends EventDispatcher {
             // Don't call `event.preventDefault()` on the pointerdown event
             // to keep receiving pointermove evens outside dragging iframe
             // https://taye.me/blog/tips/2015/11/16/mouse-drag-outside-iframe/
-            const mouseButton = event.pointerType !== 'mouse' ? null :
-                (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT ? MOUSE_BUTTON.LEFT :
-                    (event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE ? MOUSE_BUTTON.MIDDLE :
-                        (event.buttons & MOUSE_BUTTON.RIGHT) === MOUSE_BUTTON.RIGHT ? MOUSE_BUTTON.RIGHT :
-                            null;
+            const mouseButton = event.pointerType !== "mouse"
+                ? null
+                : (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT
+                    ? MOUSE_BUTTON.LEFT
+                    : (event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE
+                        ? MOUSE_BUTTON.MIDDLE
+                        : (event.buttons & MOUSE_BUTTON.RIGHT) === MOUSE_BUTTON.RIGHT
+                            ? MOUSE_BUTTON.RIGHT
+                            : null;
             if (mouseButton !== null) {
                 const zombiePointer = this._findPointerByMouseButton(mouseButton);
                 zombiePointer && this._disposePointer(zombiePointer);
             }
-            if ((event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT && this._lockedPointer)
+            if ((event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT &&
+                this._lockedPointer)
                 return;
             const pointer = {
                 pointerId: event.pointerId,
@@ -716,10 +734,10 @@ class CameraControls extends EventDispatcher {
             };
             this._activePointers.push(pointer);
             // eslint-disable-next-line no-undef
-            this._domElement.ownerDocument.removeEventListener('pointermove', onPointerMove, { passive: false });
-            this._domElement.ownerDocument.removeEventListener('pointerup', onPointerUp);
-            this._domElement.ownerDocument.addEventListener('pointermove', onPointerMove, { passive: false });
-            this._domElement.ownerDocument.addEventListener('pointerup', onPointerUp);
+            this._domElement.ownerDocument.removeEventListener("pointermove", onPointerMove, { passive: false });
+            this._domElement.ownerDocument.removeEventListener("pointerup", onPointerUp);
+            this._domElement.ownerDocument.addEventListener("pointermove", onPointerMove, { passive: false });
+            this._domElement.ownerDocument.addEventListener("pointerup", onPointerUp);
             this._isDragging = true;
             startDragging(event);
         };
@@ -735,7 +753,7 @@ class CameraControls extends EventDispatcher {
             pointer.deltaX = event.movementX;
             pointer.deltaY = event.movementY;
             this._state = 0;
-            if (event.pointerType === 'touch') {
+            if (event.pointerType === "touch") {
                 switch (this._activePointers.length) {
                     case 1:
                         this._state = this.touches.one;
@@ -750,13 +768,16 @@ class CameraControls extends EventDispatcher {
             }
             else {
                 if ((!this._isDragging && this._lockedPointer) ||
-                    this._isDragging && (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT) {
+                    (this._isDragging &&
+                        (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT)) {
                     this._state = this._state | this.mouseButtons.left;
                 }
-                if (this._isDragging && (event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE) {
+                if (this._isDragging &&
+                    (event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE) {
                     this._state = this._state | this.mouseButtons.middle;
                 }
-                if (this._isDragging && (event.buttons & MOUSE_BUTTON.RIGHT) === MOUSE_BUTTON.RIGHT) {
+                if (this._isDragging &&
+                    (event.buttons & MOUSE_BUTTON.RIGHT) === MOUSE_BUTTON.RIGHT) {
                     this._state = this._state | this.mouseButtons.right;
                 }
             }
@@ -767,7 +788,7 @@ class CameraControls extends EventDispatcher {
             if (pointer && pointer === this._lockedPointer)
                 return;
             pointer && this._disposePointer(pointer);
-            if (event.pointerType === 'touch') {
+            if (event.pointerType === "touch") {
                 switch (this._activePointers.length) {
                     case 0:
                         this._state = ACTION.NONE;
@@ -820,9 +841,19 @@ class CameraControls extends EventDispatcher {
             }
             // Ref: https://github.com/cedricpinson/osgjs/blob/00e5a7e9d9206c06fdde0436e1d62ab7cb5ce853/sources/osgViewer/input/source/InputSourceMouse.js#L89-L103
             const deltaYFactor = isMac ? -1 : -3;
-            const delta = (event.deltaMode === 1) ? event.deltaY / deltaYFactor : event.deltaY / (deltaYFactor * 10);
-            const x = this.dollyToCursor ? (event.clientX - this._elementRect.x) / this._elementRect.width * 2 - 1 : 0;
-            const y = this.dollyToCursor ? (event.clientY - this._elementRect.y) / this._elementRect.height * -2 + 1 : 0;
+            const delta = event.deltaMode === 1
+                ? event.deltaY / deltaYFactor
+                : event.deltaY / (deltaYFactor * 10);
+            const x = this.dollyToCursor
+                ? ((event.clientX - this._elementRect.x) / this._elementRect.width) *
+                    2 -
+                    1
+                : 0;
+            const y = this.dollyToCursor
+                ? ((event.clientY - this._elementRect.y) / this._elementRect.height) *
+                    -2 +
+                    1
+                : 0;
             switch (this.mouseButtons.wheel) {
                 case ACTION.ROTATE: {
                     this._rotateInternal(event.deltaX, event.deltaY);
@@ -850,7 +881,7 @@ class CameraControls extends EventDispatcher {
                     break;
                 }
             }
-            this.dispatchEvent({ type: 'control' });
+            this.dispatchEvent({ type: "control" });
         };
         const onContextMenu = (event) => {
             if (!this._domElement || !this._enabled)
@@ -862,8 +893,8 @@ class CameraControls extends EventDispatcher {
                 const pointer = this._findPointerById(pointerId);
                 pointer && this._disposePointer(pointer);
                 // eslint-disable-next-line no-undef
-                this._domElement.ownerDocument.removeEventListener('pointermove', onPointerMove, { passive: false });
-                this._domElement.ownerDocument.removeEventListener('pointerup', onPointerUp);
+                this._domElement.ownerDocument.removeEventListener("pointermove", onPointerMove, { passive: false });
+                this._domElement.ownerDocument.removeEventListener("pointerup", onPointerUp);
                 return;
             }
             event.preventDefault();
@@ -883,8 +914,10 @@ class CameraControls extends EventDispatcher {
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 dollyStart.set(0, distance);
                 // center coords of 2 finger truck
-                const x = (this._activePointers[0].clientX + this._activePointers[1].clientX) * 0.5;
-                const y = (this._activePointers[0].clientY + this._activePointers[1].clientY) * 0.5;
+                const x = (this._activePointers[0].clientX + this._activePointers[1].clientX) *
+                    0.5;
+                const y = (this._activePointers[0].clientY + this._activePointers[1].clientY) *
+                    0.5;
                 lastDragPosition.set(x, y);
             }
             this._state = 0;
@@ -892,7 +925,7 @@ class CameraControls extends EventDispatcher {
                 if (this._lockedPointer)
                     this._state = this._state | this.mouseButtons.left;
             }
-            else if ('pointerType' in event && event.pointerType === 'touch') {
+            else if ("pointerType" in event && event.pointerType === "touch") {
                 switch (this._activePointers.length) {
                     case 1:
                         this._state = this.touches.one;
@@ -906,7 +939,8 @@ class CameraControls extends EventDispatcher {
                 }
             }
             else {
-                if (!this._lockedPointer && (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT) {
+                if (!this._lockedPointer &&
+                    (event.buttons & MOUSE_BUTTON.LEFT) === MOUSE_BUTTON.LEFT) {
                     this._state = this._state | this.mouseButtons.left;
                 }
                 if ((event.buttons & MOUSE_BUTTON.MIDDLE) === MOUSE_BUTTON.MIDDLE) {
@@ -919,9 +953,10 @@ class CameraControls extends EventDispatcher {
             // stop current movement on drag start
             if ((this._state & ACTION.ROTATE) === ACTION.ROTATE ||
                 (this._state & ACTION.TOUCH_ROTATE) === ACTION.TOUCH_ROTATE ||
-                (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE ||
+                (this._state & ACTION.TOUCH_DOLLY_ROTATE) ===
+                    ACTION.TOUCH_DOLLY_ROTATE ||
                 (this._state & ACTION.TOUCH_ZOOM_ROTATE) === ACTION.TOUCH_ZOOM_ROTATE ||
-                (this._state & ACTION.TOUCH_CUSTOM) === ACTION.TOUCH_CUSTOM) {
+                (this._state & ACTION.CUSTOM) === ACTION.CUSTOM) {
                 this._sphericalEnd.theta = this._spherical.theta;
                 this._sphericalEnd.phi = this._spherical.phi;
                 this._thetaVelocity.value = 0;
@@ -931,14 +966,15 @@ class CameraControls extends EventDispatcher {
                 (this._state & ACTION.TOUCH_TRUCK) === ACTION.TOUCH_TRUCK ||
                 (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK ||
                 (this._state & ACTION.TOUCH_ZOOM_TRUCK) === ACTION.TOUCH_ZOOM_TRUCK ||
-                (this._state & ACTION.TOUCH_CUSTOM) === ACTION.TOUCH_CUSTOM) {
+                (this._state & ACTION.CUSTOM) === ACTION.CUSTOM) {
                 this._targetEnd.copy(this._target);
                 this._targetVelocity.set(0, 0, 0);
             }
             if ((this._state & ACTION.DOLLY) === ACTION.DOLLY ||
                 (this._state & ACTION.TOUCH_DOLLY) === ACTION.TOUCH_DOLLY ||
                 (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK ||
-                (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET ||
+                (this._state & ACTION.TOUCH_DOLLY_OFFSET) ===
+                    ACTION.TOUCH_DOLLY_OFFSET ||
                 (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE) {
                 this._sphericalEnd.radius = this._spherical.radius;
                 this._radiusVelocity.value = 0;
@@ -953,12 +989,13 @@ class CameraControls extends EventDispatcher {
             }
             if ((this._state & ACTION.OFFSET) === ACTION.OFFSET ||
                 (this._state & ACTION.TOUCH_OFFSET) === ACTION.TOUCH_OFFSET ||
-                (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET ||
+                (this._state & ACTION.TOUCH_DOLLY_OFFSET) ===
+                    ACTION.TOUCH_DOLLY_OFFSET ||
                 (this._state & ACTION.TOUCH_ZOOM_OFFSET) === ACTION.TOUCH_ZOOM_OFFSET) {
                 this._focalOffsetEnd.copy(this._focalOffset);
                 this._focalOffsetVelocity.set(0, 0, 0);
             }
-            this.dispatchEvent({ type: 'controlstart' });
+            this.dispatchEvent({ type: "controlstart" });
         };
         const dragging = () => {
             if (!this._enabled || !this._dragNeedsUpdate)
@@ -967,26 +1004,44 @@ class CameraControls extends EventDispatcher {
             extractClientCoordFromEvent(this._activePointers, _v2);
             // When pointer lock is enabled clientX, clientY, screenX, and screenY remain 0.
             // If pointer lock is enabled, use the Delta directory, and assume active-pointer is not multiple.
-            const isPointerLockActive = this._domElement && this._domElement.ownerDocument.pointerLockElement === this._domElement;
-            const lockedPointer = isPointerLockActive ? this._lockedPointer || this._activePointers[0] : null;
-            const deltaX = lockedPointer ? -lockedPointer.deltaX : lastDragPosition.x - _v2.x;
-            const deltaY = lockedPointer ? -lockedPointer.deltaY : lastDragPosition.y - _v2.y;
+            const isPointerLockActive = this._domElement &&
+                this._domElement.ownerDocument.pointerLockElement === this._domElement;
+            const lockedPointer = isPointerLockActive
+                ? this._lockedPointer || this._activePointers[0]
+                : null;
+            const deltaX = lockedPointer
+                ? -lockedPointer.deltaX
+                : lastDragPosition.x - _v2.x;
+            const deltaY = lockedPointer
+                ? -lockedPointer.deltaY
+                : lastDragPosition.y - _v2.y;
             lastDragPosition.copy(_v2);
             if ((this._state & ACTION.ROTATE) === ACTION.ROTATE ||
                 (this._state & ACTION.TOUCH_ROTATE) === ACTION.TOUCH_ROTATE ||
-                (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE ||
+                (this._state & ACTION.TOUCH_DOLLY_ROTATE) ===
+                    ACTION.TOUCH_DOLLY_ROTATE ||
                 (this._state & ACTION.TOUCH_ZOOM_ROTATE) === ACTION.TOUCH_ZOOM_ROTATE) {
                 this._rotateInternal(deltaX, deltaY);
                 this._isUserControllingRotate = true;
             }
-            if ((this._state & ACTION.TOUCH_CUSTOM) === ACTION.TOUCH_CUSTOM) {
+            if ((this._state & ACTION.CUSTOM) === ACTION.CUSTOM) {
                 this._rotateInternal(deltaX, 0);
                 this._isUserControllingRotate = true;
             }
             if ((this._state & ACTION.DOLLY) === ACTION.DOLLY ||
                 (this._state & ACTION.ZOOM) === ACTION.ZOOM) {
-                const dollyX = this.dollyToCursor ? (dragStartPosition.x - this._elementRect.x) / this._elementRect.width * 2 - 1 : 0;
-                const dollyY = this.dollyToCursor ? (dragStartPosition.y - this._elementRect.y) / this._elementRect.height * -2 + 1 : 0;
+                const dollyX = this.dollyToCursor
+                    ? ((dragStartPosition.x - this._elementRect.x) /
+                        this._elementRect.width) *
+                        2 -
+                        1
+                    : 0;
+                const dollyY = this.dollyToCursor
+                    ? ((dragStartPosition.y - this._elementRect.y) /
+                        this._elementRect.height) *
+                        -2 +
+                        1
+                    : 0;
                 const dollyDirection = this.dollyDragInverted ? -1 : 1;
                 if ((this._state & ACTION.DOLLY) === ACTION.DOLLY) {
                     this._dollyInternal(dollyDirection * deltaY * TOUCH_DOLLY_FACTOR, dollyX, dollyY);
@@ -1001,21 +1056,36 @@ class CameraControls extends EventDispatcher {
                 (this._state & ACTION.TOUCH_ZOOM) === ACTION.TOUCH_ZOOM ||
                 (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK ||
                 (this._state & ACTION.TOUCH_ZOOM_TRUCK) === ACTION.TOUCH_ZOOM_TRUCK ||
-                (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET ||
+                (this._state & ACTION.TOUCH_DOLLY_OFFSET) ===
+                    ACTION.TOUCH_DOLLY_OFFSET ||
                 (this._state & ACTION.TOUCH_ZOOM_OFFSET) === ACTION.TOUCH_ZOOM_OFFSET ||
-                (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE ||
+                (this._state & ACTION.TOUCH_DOLLY_ROTATE) ===
+                    ACTION.TOUCH_DOLLY_ROTATE ||
                 (this._state & ACTION.TOUCH_ZOOM_ROTATE) === ACTION.TOUCH_ZOOM_ROTATE) {
                 const dx = _v2.x - this._activePointers[1].clientX;
                 const dy = _v2.y - this._activePointers[1].clientY;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 const dollyDelta = dollyStart.y - distance;
                 dollyStart.set(0, distance);
-                const dollyX = this.dollyToCursor ? (lastDragPosition.x - this._elementRect.x) / this._elementRect.width * 2 - 1 : 0;
-                const dollyY = this.dollyToCursor ? (lastDragPosition.y - this._elementRect.y) / this._elementRect.height * -2 + 1 : 0;
+                const dollyX = this.dollyToCursor
+                    ? ((lastDragPosition.x - this._elementRect.x) /
+                        this._elementRect.width) *
+                        2 -
+                        1
+                    : 0;
+                const dollyY = this.dollyToCursor
+                    ? ((lastDragPosition.y - this._elementRect.y) /
+                        this._elementRect.height) *
+                        -2 +
+                        1
+                    : 0;
                 if ((this._state & ACTION.TOUCH_DOLLY) === ACTION.TOUCH_DOLLY ||
-                    (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE ||
-                    (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK ||
-                    (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET) {
+                    (this._state & ACTION.TOUCH_DOLLY_ROTATE) ===
+                        ACTION.TOUCH_DOLLY_ROTATE ||
+                    (this._state & ACTION.TOUCH_DOLLY_TRUCK) ===
+                        ACTION.TOUCH_DOLLY_TRUCK ||
+                    (this._state & ACTION.TOUCH_DOLLY_OFFSET) ===
+                        ACTION.TOUCH_DOLLY_OFFSET) {
                     this._dollyInternal(dollyDelta * TOUCH_DOLLY_FACTOR, dollyX, dollyY);
                     this._isUserControllingDolly = true;
                 }
@@ -1031,32 +1101,34 @@ class CameraControls extends EventDispatcher {
                 this._truckInternal(deltaX, deltaY, false);
                 this._isUserControllingTruck = true;
             }
-            if ((this._state & ACTION.TOUCH_CUSTOM) === ACTION.TOUCH_CUSTOM) {
+            if ((this._state & ACTION.CUSTOM) === ACTION.CUSTOM) {
                 this._truckInternal(0, deltaY, false);
                 this._isUserControllingTruck = true;
             }
             if ((this._state & ACTION.OFFSET) === ACTION.OFFSET ||
                 (this._state & ACTION.TOUCH_OFFSET) === ACTION.TOUCH_OFFSET ||
-                (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET ||
+                (this._state & ACTION.TOUCH_DOLLY_OFFSET) ===
+                    ACTION.TOUCH_DOLLY_OFFSET ||
                 (this._state & ACTION.TOUCH_ZOOM_OFFSET) === ACTION.TOUCH_ZOOM_OFFSET) {
                 this._truckInternal(deltaX, deltaY, true);
                 this._isUserControllingOffset = true;
             }
-            this.dispatchEvent({ type: 'control' });
+            this.dispatchEvent({ type: "control" });
         };
         const endDragging = () => {
             extractClientCoordFromEvent(this._activePointers, _v2);
             lastDragPosition.copy(_v2);
             this._dragNeedsUpdate = false;
             if (this._activePointers.length === 0 ||
-                (this._activePointers.length === 1 && this._activePointers[0] === this._lockedPointer)) {
+                (this._activePointers.length === 1 &&
+                    this._activePointers[0] === this._lockedPointer)) {
                 this._isDragging = false;
             }
             if (this._activePointers.length === 0 && this._domElement) {
                 // eslint-disable-next-line no-undef
-                this._domElement.ownerDocument.removeEventListener('pointermove', onPointerMove, { passive: false });
-                this._domElement.ownerDocument.removeEventListener('pointerup', onPointerUp);
-                this.dispatchEvent({ type: 'controlend' });
+                this._domElement.ownerDocument.removeEventListener("pointermove", onPointerMove, { passive: false });
+                this._domElement.ownerDocument.removeEventListener("pointerup", onPointerUp);
+                this.dispatchEvent({ type: "controlend" });
             }
         };
         this.lockPointer = () => {
@@ -1074,13 +1146,13 @@ class CameraControls extends EventDispatcher {
             };
             this._activePointers.push(this._lockedPointer);
             // eslint-disable-next-line no-undef
-            this._domElement.ownerDocument.removeEventListener('pointermove', onPointerMove, { passive: false });
-            this._domElement.ownerDocument.removeEventListener('pointerup', onPointerUp);
+            this._domElement.ownerDocument.removeEventListener("pointermove", onPointerMove, { passive: false });
+            this._domElement.ownerDocument.removeEventListener("pointerup", onPointerUp);
             this._domElement.requestPointerLock();
-            this._domElement.ownerDocument.addEventListener('pointerlockchange', onPointerLockChange);
-            this._domElement.ownerDocument.addEventListener('pointerlockerror', onPointerLockError);
-            this._domElement.ownerDocument.addEventListener('pointermove', onPointerMove, { passive: false });
-            this._domElement.ownerDocument.addEventListener('pointerup', onPointerUp);
+            this._domElement.ownerDocument.addEventListener("pointerlockchange", onPointerLockChange);
+            this._domElement.ownerDocument.addEventListener("pointerlockerror", onPointerLockError);
+            this._domElement.ownerDocument.addEventListener("pointermove", onPointerMove, { passive: false });
+            this._domElement.ownerDocument.addEventListener("pointerup", onPointerUp);
             startDragging();
         };
         this.unlockPointer = () => {
@@ -1090,12 +1162,13 @@ class CameraControls extends EventDispatcher {
                 this._lockedPointer = null;
             }
             (_a = this._domElement) === null || _a === void 0 ? void 0 : _a.ownerDocument.exitPointerLock();
-            (_b = this._domElement) === null || _b === void 0 ? void 0 : _b.ownerDocument.removeEventListener('pointerlockchange', onPointerLockChange);
-            (_c = this._domElement) === null || _c === void 0 ? void 0 : _c.ownerDocument.removeEventListener('pointerlockerror', onPointerLockError);
+            (_b = this._domElement) === null || _b === void 0 ? void 0 : _b.ownerDocument.removeEventListener("pointerlockchange", onPointerLockChange);
+            (_c = this._domElement) === null || _c === void 0 ? void 0 : _c.ownerDocument.removeEventListener("pointerlockerror", onPointerLockError);
             this.cancel();
         };
         const onPointerLockChange = () => {
-            const isPointerLockActive = this._domElement && this._domElement.ownerDocument.pointerLockElement === this._domElement;
+            const isPointerLockActive = this._domElement &&
+                this._domElement.ownerDocument.pointerLockElement === this._domElement;
             if (!isPointerLockActive)
                 this.unlockPointer();
         };
@@ -1104,33 +1177,37 @@ class CameraControls extends EventDispatcher {
         };
         this._addAllEventListeners = (domElement) => {
             this._domElement = domElement;
-            this._domElement.style.touchAction = 'none';
-            this._domElement.style.userSelect = 'none';
-            this._domElement.style.webkitUserSelect = 'none';
-            this._domElement.addEventListener('pointerdown', onPointerDown);
-            this._domElement.addEventListener('pointercancel', onPointerUp);
-            this._domElement.addEventListener('wheel', onMouseWheel, { passive: false });
-            this._domElement.addEventListener('contextmenu', onContextMenu);
+            this._domElement.style.touchAction = "none";
+            this._domElement.style.userSelect = "none";
+            this._domElement.style.webkitUserSelect = "none";
+            this._domElement.addEventListener("pointerdown", onPointerDown);
+            this._domElement.addEventListener("pointercancel", onPointerUp);
+            this._domElement.addEventListener("wheel", onMouseWheel, {
+                passive: false,
+            });
+            this._domElement.addEventListener("contextmenu", onContextMenu);
         };
         this._removeAllEventListeners = () => {
             if (!this._domElement)
                 return;
-            this._domElement.style.touchAction = '';
-            this._domElement.style.userSelect = '';
-            this._domElement.style.webkitUserSelect = '';
-            this._domElement.removeEventListener('pointerdown', onPointerDown);
-            this._domElement.removeEventListener('pointercancel', onPointerUp);
+            this._domElement.style.touchAction = "";
+            this._domElement.style.userSelect = "";
+            this._domElement.style.webkitUserSelect = "";
+            this._domElement.removeEventListener("pointerdown", onPointerDown);
+            this._domElement.removeEventListener("pointercancel", onPointerUp);
             // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener#matching_event_listeners_for_removal
             // > it's probably wise to use the same values used for the call to `addEventListener()` when calling `removeEventListener()`
             // see https://github.com/microsoft/TypeScript/issues/32912#issuecomment-522142969
             // eslint-disable-next-line no-undef
-            this._domElement.removeEventListener('wheel', onMouseWheel, { passive: false });
-            this._domElement.removeEventListener('contextmenu', onContextMenu);
+            this._domElement.removeEventListener("wheel", onMouseWheel, {
+                passive: false,
+            });
+            this._domElement.removeEventListener("contextmenu", onContextMenu);
             // eslint-disable-next-line no-undef
-            this._domElement.ownerDocument.removeEventListener('pointermove', onPointerMove, { passive: false });
-            this._domElement.ownerDocument.removeEventListener('pointerup', onPointerUp);
-            this._domElement.ownerDocument.removeEventListener('pointerlockchange', onPointerLockChange);
-            this._domElement.ownerDocument.removeEventListener('pointerlockerror', onPointerLockError);
+            this._domElement.ownerDocument.removeEventListener("pointermove", onPointerMove, { passive: false });
+            this._domElement.ownerDocument.removeEventListener("pointerup", onPointerUp);
+            this._domElement.ownerDocument.removeEventListener("pointerlockchange", onPointerLockChange);
+            this._domElement.ownerDocument.removeEventListener("pointerlockerror", onPointerLockError);
         };
         this.cancel = () => {
             if (this._state === ACTION.NONE)
@@ -1170,15 +1247,15 @@ class CameraControls extends EventDispatcher {
         if (!this._domElement)
             return;
         if (enabled) {
-            this._domElement.style.touchAction = 'none';
-            this._domElement.style.userSelect = 'none';
-            this._domElement.style.webkitUserSelect = 'none';
+            this._domElement.style.touchAction = "none";
+            this._domElement.style.userSelect = "none";
+            this._domElement.style.webkitUserSelect = "none";
         }
         else {
             this.cancel();
-            this._domElement.style.touchAction = '';
-            this._domElement.style.userSelect = '';
-            this._domElement.style.webkitUserSelect = '';
+            this._domElement.style.touchAction = "";
+            this._domElement.style.userSelect = "";
+            this._domElement.style.webkitUserSelect = "";
         }
     }
     /**
@@ -1399,8 +1476,8 @@ class CameraControls extends EventDispatcher {
             this._spherical.phi = this._sphericalEnd.phi;
         }
         const resolveImmediately = !enableTransition ||
-            approxEquals(this._spherical.theta, this._sphericalEnd.theta, this.restThreshold) &&
-                approxEquals(this._spherical.phi, this._sphericalEnd.phi, this.restThreshold);
+            (approxEquals(this._spherical.theta, this._sphericalEnd.theta, this.restThreshold) &&
+                approxEquals(this._spherical.phi, this._sphericalEnd.phi, this.restThreshold));
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1442,7 +1519,8 @@ class CameraControls extends EventDispatcher {
         if (!enableTransition) {
             this._spherical.radius = this._sphericalEnd.radius;
         }
-        const resolveImmediately = !enableTransition || approxEquals(this._spherical.radius, this._sphericalEnd.radius, this.restThreshold);
+        const resolveImmediately = !enableTransition ||
+            approxEquals(this._spherical.radius, this._sphericalEnd.radius, this.restThreshold);
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1458,9 +1536,9 @@ class CameraControls extends EventDispatcher {
             this._target.copy(this._targetEnd);
         }
         const resolveImmediately = !enableTransition ||
-            approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
+            (approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
                 approxEquals(this._target.y, this._targetEnd.y, this.restThreshold) &&
-                approxEquals(this._target.z, this._targetEnd.z, this.restThreshold);
+                approxEquals(this._target.z, this._targetEnd.z, this.restThreshold));
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1487,7 +1565,8 @@ class CameraControls extends EventDispatcher {
         if (!enableTransition) {
             this._zoom = this._zoomEnd;
         }
-        const resolveImmediately = !enableTransition || approxEquals(this._zoom, this._zoomEnd, this.restThreshold);
+        const resolveImmediately = !enableTransition ||
+            approxEquals(this._zoom, this._zoomEnd, this.restThreshold);
         this._changedZoom = 0;
         return this._createOnRestPromise(resolveImmediately);
     }
@@ -1496,7 +1575,7 @@ class CameraControls extends EventDispatcher {
      * @category Methods
      */
     pan(x, y, enableTransition = false) {
-        console.warn('`pan` has been renamed to `truck`');
+        console.warn("`pan` has been renamed to `truck`");
         return this.truck(x, y, enableTransition);
     }
     /**
@@ -1556,9 +1635,9 @@ class CameraControls extends EventDispatcher {
             this._target.copy(this._targetEnd);
         }
         const resolveImmediately = !enableTransition ||
-            approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
+            (approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
                 approxEquals(this._target.y, this._targetEnd.y, this.restThreshold) &&
-                approxEquals(this._target.z, this._targetEnd.z, this.restThreshold);
+                approxEquals(this._target.z, this._targetEnd.z, this.restThreshold));
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1573,7 +1652,9 @@ class CameraControls extends EventDispatcher {
     lookInDirectionOf(x, y, z, enableTransition = false) {
         const point = _v3A.set(x, y, z);
         const direction = point.sub(this._targetEnd).normalize();
-        const position = direction.multiplyScalar(-this._sphericalEnd.radius).add(this._targetEnd);
+        const position = direction
+            .multiplyScalar(-this._sphericalEnd.radius)
+            .add(this._targetEnd);
         return this.setPosition(position.x, position.y, position.z, enableTransition);
     }
     /**
@@ -1589,13 +1670,13 @@ class CameraControls extends EventDispatcher {
      * @returns Transition end promise
      * @category Methods
      */
-    fitToBox(box3OrObject, enableTransition, { cover = false, paddingLeft = 0, paddingRight = 0, paddingBottom = 0, paddingTop = 0 } = {}) {
+    fitToBox(box3OrObject, enableTransition, { cover = false, paddingLeft = 0, paddingRight = 0, paddingBottom = 0, paddingTop = 0, } = {}) {
         const promises = [];
         const aabb = box3OrObject.isBox3
             ? _box3A.copy(box3OrObject)
             : _box3A.setFromObject(box3OrObject);
         if (aabb.isEmpty()) {
-            console.warn('camera-controls: fitTo() cannot be used with an empty box. Aborting');
+            console.warn("camera-controls: fitTo() cannot be used with an empty box. Aborting");
             Promise.resolve();
         }
         // round to closest axis ( forward | backward | right | left | top | bottom )
@@ -1657,7 +1738,9 @@ class CameraControls extends EventDispatcher {
             const camera = this._camera;
             const width = camera.right - camera.left;
             const height = camera.top - camera.bottom;
-            const zoom = cover ? Math.max(width / bbSize.x, height / bbSize.y) : Math.min(width / bbSize.x, height / bbSize.y);
+            const zoom = cover
+                ? Math.max(width / bbSize.x, height / bbSize.y)
+                : Math.min(width / bbSize.x, height / bbSize.y);
             promises.push(this.moveTo(center.x, center.y, center.z, enableTransition));
             promises.push(this.zoomTo(zoom, enableTransition));
             promises.push(this.setFocalOffset(0, 0, 0, enableTransition));
@@ -1672,10 +1755,10 @@ class CameraControls extends EventDispatcher {
      */
     fitToSphere(sphereOrMesh, enableTransition) {
         const promises = [];
-        const isObject3D = 'isObject3D' in sphereOrMesh;
-        const boundingSphere = isObject3D ?
-            CameraControls.createBoundingSphere(sphereOrMesh, _sphere) :
-            _sphere.copy(sphereOrMesh);
+        const isObject3D = "isObject3D" in sphereOrMesh;
+        const boundingSphere = isObject3D
+            ? CameraControls.createBoundingSphere(sphereOrMesh, _sphere)
+            : _sphere.copy(sphereOrMesh);
         promises.push(this.moveTo(boundingSphere.center.x, boundingSphere.center.y, boundingSphere.center.z, enableTransition));
         if (isPerspectiveCamera(this._camera)) {
             const distanceToFit = this.getDistanceToFitSphere(boundingSphere.radius);
@@ -1719,12 +1802,12 @@ class CameraControls extends EventDispatcher {
             this._spherical.copy(this._sphericalEnd);
         }
         const resolveImmediately = !enableTransition ||
-            approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
+            (approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
                 approxEquals(this._target.y, this._targetEnd.y, this.restThreshold) &&
                 approxEquals(this._target.z, this._targetEnd.z, this.restThreshold) &&
                 approxEquals(this._spherical.theta, this._sphericalEnd.theta, this.restThreshold) &&
                 approxEquals(this._spherical.phi, this._sphericalEnd.phi, this.restThreshold) &&
-                approxEquals(this._spherical.radius, this._sphericalEnd.radius, this.restThreshold);
+                approxEquals(this._spherical.radius, this._sphericalEnd.radius, this.restThreshold));
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1769,12 +1852,12 @@ class CameraControls extends EventDispatcher {
             this._spherical.copy(this._sphericalEnd);
         }
         const resolveImmediately = !enableTransition ||
-            approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
+            (approxEquals(this._target.x, this._targetEnd.x, this.restThreshold) &&
                 approxEquals(this._target.y, this._targetEnd.y, this.restThreshold) &&
                 approxEquals(this._target.z, this._targetEnd.z, this.restThreshold) &&
                 approxEquals(this._spherical.theta, this._sphericalEnd.theta, this.restThreshold) &&
                 approxEquals(this._spherical.phi, this._sphericalEnd.phi, this.restThreshold) &&
-                approxEquals(this._spherical.radius, this._sphericalEnd.radius, this.restThreshold);
+                approxEquals(this._spherical.radius, this._sphericalEnd.radius, this.restThreshold));
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1820,9 +1903,9 @@ class CameraControls extends EventDispatcher {
         if (!enableTransition)
             this._focalOffset.copy(this._focalOffsetEnd);
         const resolveImmediately = !enableTransition ||
-            approxEquals(this._focalOffset.x, this._focalOffsetEnd.x, this.restThreshold) &&
+            (approxEquals(this._focalOffset.x, this._focalOffsetEnd.x, this.restThreshold) &&
                 approxEquals(this._focalOffset.y, this._focalOffsetEnd.y, this.restThreshold) &&
-                approxEquals(this._focalOffset.z, this._focalOffsetEnd.z, this.restThreshold);
+                approxEquals(this._focalOffset.z, this._focalOffsetEnd.z, this.restThreshold));
         return this._createOnRestPromise(resolveImmediately);
     }
     /**
@@ -1876,15 +1959,18 @@ class CameraControls extends EventDispatcher {
      * @category Methods
      */
     setViewport(viewportOrX, y, width, height) {
-        if (viewportOrX === null) { // null
+        if (viewportOrX === null) {
+            // null
             this._viewport = null;
             return;
         }
         this._viewport = this._viewport || new THREE.Vector4();
-        if (typeof viewportOrX === 'number') { // number
+        if (typeof viewportOrX === "number") {
+            // number
             this._viewport.set(viewportOrX, y, width, height);
         }
-        else { // Vector4
+        else {
+            // Vector4
             this._viewport.copy(viewportOrX);
         }
     }
@@ -1897,13 +1983,15 @@ class CameraControls extends EventDispatcher {
      * @category Methods
      */
     getDistanceToFitBox(width, height, depth, cover = false) {
-        if (notSupportedInOrthographicCamera(this._camera, 'getDistanceToFitBox'))
+        if (notSupportedInOrthographicCamera(this._camera, "getDistanceToFitBox"))
             return this._spherical.radius;
         const boundingRectAspect = width / height;
         const fov = this._camera.getEffectiveFOV() * DEG2RAD;
         const aspect = this._camera.aspect;
-        const heightToFit = (cover ? boundingRectAspect > aspect : boundingRectAspect < aspect) ? height : width / aspect;
-        return heightToFit * 0.5 / Math.tan(fov * 0.5) + depth * 0.5;
+        const heightToFit = (cover ? boundingRectAspect > aspect : boundingRectAspect < aspect)
+            ? height
+            : width / aspect;
+        return (heightToFit * 0.5) / Math.tan(fov * 0.5) + depth * 0.5;
     }
     /**
      * Calculate the distance to fit the sphere.
@@ -1912,13 +2000,13 @@ class CameraControls extends EventDispatcher {
      * @category Methods
      */
     getDistanceToFitSphere(radius) {
-        if (notSupportedInOrthographicCamera(this._camera, 'getDistanceToFitSphere'))
+        if (notSupportedInOrthographicCamera(this._camera, "getDistanceToFitSphere"))
             return this._spherical.radius;
         // https://stackoverflow.com/a/44849975
         const vFOV = this._camera.getEffectiveFOV() * DEG2RAD;
         const hFOV = Math.atan(Math.tan(vFOV * 0.5) * this._camera.aspect) * 2;
         const fov = 1 < this._camera.aspect ? vFOV : hFOV;
-        return radius / (Math.sin(fov * 0.5));
+        return radius / Math.sin(fov * 0.5);
     }
     /**
      * Returns the orbit center position, where the camera looking at.
@@ -1938,7 +2026,10 @@ class CameraControls extends EventDispatcher {
      */
     getPosition(out, receiveEndValue = true) {
         const _out = !!out && out.isVector3 ? out : new THREE.Vector3();
-        return _out.setFromSpherical(receiveEndValue ? this._sphericalEnd : this._spherical).applyQuaternion(this._yAxisUpSpaceInverse).add(receiveEndValue ? this._targetEnd : this._target);
+        return _out
+            .setFromSpherical(receiveEndValue ? this._sphericalEnd : this._spherical)
+            .applyQuaternion(this._yAxisUpSpaceInverse)
+            .add(receiveEndValue ? this._targetEnd : this._target);
     }
     /**
      * Returns the spherical coordinates of the orbit.
@@ -1968,7 +2059,9 @@ class CameraControls extends EventDispatcher {
         this._sphericalEnd.theta = this._sphericalEnd.theta % PI_2;
         if (this._sphericalEnd.theta < 0)
             this._sphericalEnd.theta += PI_2;
-        this._spherical.theta += PI_2 * Math.round((this._sphericalEnd.theta - this._spherical.theta) / PI_2);
+        this._spherical.theta +=
+            PI_2 *
+                Math.round((this._sphericalEnd.theta - this._spherical.theta) / PI_2);
     }
     /**
      * stop all transitions.
@@ -2026,7 +2119,9 @@ class CameraControls extends EventDispatcher {
      * @category Methods
      */
     applyCameraUp() {
-        const cameraDirection = _v3A.subVectors(this._target, this._camera.position).normalize();
+        const cameraDirection = _v3A
+            .subVectors(this._target, this._camera.position)
+            .normalize();
         // So first find the vector off to the side, orthogonal to both this.object.up and
         // the "view" vector.
         const side = _v3B.crossVectors(cameraDirection, this._camera.up);
@@ -2058,7 +2153,9 @@ class CameraControls extends EventDispatcher {
             this._spherical.theta = this._sphericalEnd.theta;
         }
         else {
-            const smoothTime = this._isUserControllingRotate ? this.draggingSmoothTime : this.smoothTime;
+            const smoothTime = this._isUserControllingRotate
+                ? this.draggingSmoothTime
+                : this.smoothTime;
             this._spherical.theta = smoothDamp(this._spherical.theta, this._sphericalEnd.theta, this._thetaVelocity, smoothTime, Infinity, delta);
             this._needsUpdate = true;
         }
@@ -2068,7 +2165,9 @@ class CameraControls extends EventDispatcher {
             this._spherical.phi = this._sphericalEnd.phi;
         }
         else {
-            const smoothTime = this._isUserControllingRotate ? this.draggingSmoothTime : this.smoothTime;
+            const smoothTime = this._isUserControllingRotate
+                ? this.draggingSmoothTime
+                : this.smoothTime;
             this._spherical.phi = smoothDamp(this._spherical.phi, this._sphericalEnd.phi, this._phiVelocity, smoothTime, Infinity, delta);
             this._needsUpdate = true;
         }
@@ -2078,27 +2177,37 @@ class CameraControls extends EventDispatcher {
             this._spherical.radius = this._sphericalEnd.radius;
         }
         else {
-            const smoothTime = this._isUserControllingDolly ? this.draggingSmoothTime : this.smoothTime;
+            const smoothTime = this._isUserControllingDolly
+                ? this.draggingSmoothTime
+                : this.smoothTime;
             this._spherical.radius = smoothDamp(this._spherical.radius, this._sphericalEnd.radius, this._radiusVelocity, smoothTime, this.maxSpeed, delta);
             this._needsUpdate = true;
         }
         // update target position
-        if (approxZero(deltaTarget.x) && approxZero(deltaTarget.y) && approxZero(deltaTarget.z)) {
+        if (approxZero(deltaTarget.x) &&
+            approxZero(deltaTarget.y) &&
+            approxZero(deltaTarget.z)) {
             this._targetVelocity.set(0, 0, 0);
             this._target.copy(this._targetEnd);
         }
         else {
-            const smoothTime = this._isUserControllingTruck ? this.draggingSmoothTime : this.smoothTime;
+            const smoothTime = this._isUserControllingTruck
+                ? this.draggingSmoothTime
+                : this.smoothTime;
             smoothDampVec3(this._target, this._targetEnd, this._targetVelocity, smoothTime, this.maxSpeed, delta, this._target);
             this._needsUpdate = true;
         }
         // update focalOffset
-        if (approxZero(deltaOffset.x) && approxZero(deltaOffset.y) && approxZero(deltaOffset.z)) {
+        if (approxZero(deltaOffset.x) &&
+            approxZero(deltaOffset.y) &&
+            approxZero(deltaOffset.z)) {
             this._focalOffsetVelocity.set(0, 0, 0);
             this._focalOffset.copy(this._focalOffsetEnd);
         }
         else {
-            const smoothTime = this._isUserControllingOffset ? this.draggingSmoothTime : this.smoothTime;
+            const smoothTime = this._isUserControllingOffset
+                ? this.draggingSmoothTime
+                : this.smoothTime;
             smoothDampVec3(this._focalOffset, this._focalOffsetEnd, this._focalOffsetVelocity, smoothTime, this.maxSpeed, delta, this._focalOffset);
             this._needsUpdate = true;
         }
@@ -2108,7 +2217,9 @@ class CameraControls extends EventDispatcher {
             this._zoom = this._zoomEnd;
         }
         else {
-            const smoothTime = this._isUserControllingZoom ? this.draggingSmoothTime : this.smoothTime;
+            const smoothTime = this._isUserControllingZoom
+                ? this.draggingSmoothTime
+                : this.smoothTime;
             this._zoom = smoothDamp(this._zoom, this._zoomEnd, this._zoomVelocity, smoothTime, Infinity, delta);
         }
         if (this.dollyToCursor) {
@@ -2120,19 +2231,25 @@ class CameraControls extends EventDispatcher {
                 if (planeX.lengthSq() === 0)
                     planeX.x = 1.0;
                 const planeY = _v3B.crossVectors(planeX, cameraDirection);
-                const worldToScreen = this._sphericalEnd.radius * Math.tan(camera.getEffectiveFOV() * DEG2RAD * 0.5);
+                const worldToScreen = this._sphericalEnd.radius *
+                    Math.tan(camera.getEffectiveFOV() * DEG2RAD * 0.5);
                 const prevRadius = this._sphericalEnd.radius - dollyControlAmount;
                 const lerpRatio = (prevRadius - this._sphericalEnd.radius) / this._sphericalEnd.radius;
-                const cursor = _v3C.copy(this._targetEnd)
+                const cursor = _v3C
+                    .copy(this._targetEnd)
                     .add(planeX.multiplyScalar(this._dollyControlCoord.x * worldToScreen * camera.aspect))
                     .add(planeY.multiplyScalar(this._dollyControlCoord.y * worldToScreen));
                 const newTargetEnd = _v3A.copy(this._targetEnd).lerp(cursor, lerpRatio);
-                const isMin = this._lastDollyDirection === DOLLY_DIRECTION.IN && this._spherical.radius <= this.minDistance;
-                const isMax = this._lastDollyDirection === DOLLY_DIRECTION.OUT && this.maxDistance <= this._spherical.radius;
+                const isMin = this._lastDollyDirection === DOLLY_DIRECTION.IN &&
+                    this._spherical.radius <= this.minDistance;
+                const isMax = this._lastDollyDirection === DOLLY_DIRECTION.OUT &&
+                    this.maxDistance <= this._spherical.radius;
                 if (this.infinityDolly && (isMin || isMax)) {
                     this._sphericalEnd.radius -= dollyControlAmount;
                     this._spherical.radius -= dollyControlAmount;
-                    const dollyAmount = _v3B.copy(cameraDirection).multiplyScalar(-dollyControlAmount);
+                    const dollyAmount = _v3B
+                        .copy(cameraDirection)
+                        .multiplyScalar(-dollyControlAmount);
                     newTargetEnd.add(dollyAmount);
                 }
                 // target position may be moved beyond boundary.
@@ -2144,12 +2261,19 @@ class CameraControls extends EventDispatcher {
                 if (approxZero(this._changedDolly))
                     this._changedDolly = 0;
             }
-            else if (isOrthographicCamera(this._camera) && this._changedZoom !== 0) {
+            else if (isOrthographicCamera(this._camera) &&
+                this._changedZoom !== 0) {
                 const dollyControlAmount = this._zoom - this._lastZoom;
                 const camera = this._camera;
-                const worldCursorPosition = _v3A.set(this._dollyControlCoord.x, this._dollyControlCoord.y, (camera.near + camera.far) / (camera.near - camera.far)).unproject(camera);
-                const quaternion = _v3B.set(0, 0, -1).applyQuaternion(camera.quaternion);
-                const cursor = _v3C.copy(worldCursorPosition).add(quaternion.multiplyScalar(-worldCursorPosition.dot(camera.up)));
+                const worldCursorPosition = _v3A
+                    .set(this._dollyControlCoord.x, this._dollyControlCoord.y, (camera.near + camera.far) / (camera.near - camera.far))
+                    .unproject(camera);
+                const quaternion = _v3B
+                    .set(0, 0, -1)
+                    .applyQuaternion(camera.quaternion);
+                const cursor = _v3C
+                    .copy(worldCursorPosition)
+                    .add(quaternion.multiplyScalar(-worldCursorPosition.dot(camera.up)));
                 const prevZoom = this._zoom - dollyControlAmount;
                 const lerpRatio = -(prevZoom - this._zoom) / this._zoom;
                 // find the "distance" (aka plane constant in three.js) of Plane
@@ -2185,7 +2309,10 @@ class CameraControls extends EventDispatcher {
         this._spherical.radius = Math.min(this._spherical.radius, maxDistance);
         // decompose spherical to the camera position
         this._spherical.makeSafe();
-        this._camera.position.setFromSpherical(this._spherical).applyQuaternion(this._yAxisUpSpaceInverse).add(this._target);
+        this._camera.position
+            .setFromSpherical(this._spherical)
+            .applyQuaternion(this._yAxisUpSpaceInverse)
+            .add(this._target);
         this._camera.lookAt(this._target);
         // set offset after the orbit movement
         const affectOffset = !approxZero(this._focalOffset.x) ||
@@ -2203,16 +2330,18 @@ class CameraControls extends EventDispatcher {
             this._camera.position.add(_v3A);
         }
         if (this._boundaryEnclosesCamera) {
-            this._encloseToBoundary(this._camera.position.copy(this._target), _v3A.setFromSpherical(this._spherical).applyQuaternion(this._yAxisUpSpaceInverse), 1.0);
+            this._encloseToBoundary(this._camera.position.copy(this._target), _v3A
+                .setFromSpherical(this._spherical)
+                .applyQuaternion(this._yAxisUpSpaceInverse), 1.0);
         }
         const updated = this._needsUpdate;
         if (updated && !this._updatedLastTime) {
             this._hasRested = false;
-            this.dispatchEvent({ type: 'wake' });
-            this.dispatchEvent({ type: 'update' });
+            this.dispatchEvent({ type: "wake" });
+            this.dispatchEvent({ type: "update" });
         }
         else if (updated) {
-            this.dispatchEvent({ type: 'update' });
+            this.dispatchEvent({ type: "update" });
             if (approxZero(deltaTheta, this.restThreshold) &&
                 approxZero(deltaPhi, this.restThreshold) &&
                 approxZero(deltaRadius, this.restThreshold) &&
@@ -2225,11 +2354,11 @@ class CameraControls extends EventDispatcher {
                 approxZero(deltaZoom, this.restThreshold) &&
                 !this._hasRested) {
                 this._hasRested = true;
-                this.dispatchEvent({ type: 'rest' });
+                this.dispatchEvent({ type: "rest" });
             }
         }
         else if (!updated && this._updatedLastTime) {
-            this.dispatchEvent({ type: 'sleep' });
+            this.dispatchEvent({ type: "sleep" });
         }
         this._lastDistance = this._spherical.radius;
         this._lastZoom = this._zoom;
@@ -2259,7 +2388,10 @@ class CameraControls extends EventDispatcher {
             dollyToCursor: this.dollyToCursor,
             verticalDragToForward: this.verticalDragToForward,
             target: this._targetEnd.toArray(),
-            position: _v3A.setFromSpherical(this._sphericalEnd).add(this._targetEnd).toArray(),
+            position: _v3A
+                .setFromSpherical(this._sphericalEnd)
+                .add(this._targetEnd)
+                .toArray(),
             zoom: this._zoomEnd,
             focalOffset: this._focalOffsetEnd.toArray(),
             target0: this._target0.toArray(),
@@ -2296,7 +2428,10 @@ class CameraControls extends EventDispatcher {
         this._zoom0 = obj.zoom0;
         this._focalOffset0.fromArray(obj.focalOffset0);
         this.moveTo(obj.target[0], obj.target[1], obj.target[2], enableTransition);
-        _sphericalA.setFromVector3(_v3A.fromArray(obj.position).sub(this._targetEnd).applyQuaternion(this._yAxisUpSpace));
+        _sphericalA.setFromVector3(_v3A
+            .fromArray(obj.position)
+            .sub(this._targetEnd)
+            .applyQuaternion(this._yAxisUpSpace));
         this.rotateTo(_sphericalA.theta, _sphericalA.phi, enableTransition);
         this.dollyTo(_sphericalA.radius, enableTransition);
         this.zoomTo(obj.zoom, enableTransition);
@@ -2309,10 +2444,10 @@ class CameraControls extends EventDispatcher {
      */
     connect(domElement) {
         if (this._domElement) {
-            console.warn('camera-controls is already connected.');
+            console.warn("camera-controls is already connected.");
             return;
         }
-        domElement.setAttribute('data-camera-controls-version', VERSION);
+        domElement.setAttribute("data-camera-controls-version", VERSION);
         this._addAllEventListeners(domElement);
         this._getClientRect(this._elementRect);
     }
@@ -2323,7 +2458,7 @@ class CameraControls extends EventDispatcher {
         this.cancel();
         this._removeAllEventListeners();
         if (this._domElement) {
-            this._domElement.removeAttribute('data-camera-controls-version');
+            this._domElement.removeAttribute("data-camera-controls-version");
             this._domElement = undefined;
         }
     }
@@ -2340,7 +2475,10 @@ class CameraControls extends EventDispatcher {
     // it's okay to expose public though
     _getTargetDirection(out) {
         // divide by distance to normalize, lighter than `Vector3.prototype.normalize()`
-        return out.setFromSpherical(this._spherical).divideScalar(this._spherical.radius).applyQuaternion(this._yAxisUpSpaceInverse);
+        return out
+            .setFromSpherical(this._spherical)
+            .divideScalar(this._spherical.radius)
+            .applyQuaternion(this._yAxisUpSpaceInverse);
     }
     // it's okay to expose public though
     _getCameraDirection(out) {
@@ -2357,7 +2495,8 @@ class CameraControls extends EventDispatcher {
     }
     _encloseToBoundary(position, offset, friction) {
         const offsetLength2 = offset.lengthSq();
-        if (offsetLength2 === 0.0) { // sanity check
+        if (offsetLength2 === 0.0) {
+            // sanity check
             return position;
         }
         // See: https://twitter.com/FMS_Cat/status/1106508958640988161
@@ -2365,17 +2504,20 @@ class CameraControls extends EventDispatcher {
         const clampedTarget = this._boundary.clampPoint(newTarget, _v3C); // clamped target
         const deltaClampedTarget = clampedTarget.sub(newTarget); // newTarget -> clampedTarget
         const deltaClampedTargetLength2 = deltaClampedTarget.lengthSq(); // squared length of deltaClampedTarget
-        if (deltaClampedTargetLength2 === 0.0) { // when the position doesn't have to be clamped
+        if (deltaClampedTargetLength2 === 0.0) {
+            // when the position doesn't have to be clamped
             return position.add(offset);
         }
-        else if (deltaClampedTargetLength2 === offsetLength2) { // when the position is completely stuck
+        else if (deltaClampedTargetLength2 === offsetLength2) {
+            // when the position is completely stuck
             return position;
         }
         else if (friction === 0.0) {
             return position.add(offset).add(deltaClampedTarget);
         }
         else {
-            const offsetFactor = 1.0 + friction * deltaClampedTargetLength2 / offset.dot(deltaClampedTarget);
+            const offsetFactor = 1.0 +
+                (friction * deltaClampedTargetLength2) / offset.dot(deltaClampedTarget);
             return position
                 .add(_v3B.copy(offset).multiplyScalar(offsetFactor))
                 .add(deltaClampedTarget.multiplyScalar(1.0 - friction));
@@ -2412,7 +2554,7 @@ class CameraControls extends EventDispatcher {
         const hasCollider = this.colliderMeshes.length >= 1;
         if (!hasCollider)
             return distance;
-        if (notSupportedInOrthographicCamera(this._camera, '_collisionTest'))
+        if (notSupportedInOrthographicCamera(this._camera, "_collisionTest"))
             return distance;
         const rayDirection = this._getTargetDirection(_cameraDirection);
         _rotationMatrix.lookAt(_ORIGIN, rayDirection, this._camera.up);
@@ -2454,13 +2596,13 @@ class CameraControls extends EventDispatcher {
         if (resolveImmediately)
             return Promise.resolve();
         this._hasRested = false;
-        this.dispatchEvent({ type: 'transitionstart' });
+        this.dispatchEvent({ type: "transitionstart" });
         return new Promise((resolve) => {
             const onResolve = () => {
-                this.removeEventListener('rest', onResolve);
+                this.removeEventListener("rest", onResolve);
                 resolve();
             };
-            this.addEventListener('rest', onResolve);
+            this.addEventListener("rest", onResolve);
         });
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2472,7 +2614,7 @@ class CameraControls extends EventDispatcher {
      * @category Properties
      */
     get dampingFactor() {
-        console.warn('.dampingFactor has been deprecated. use smoothTime (in seconds) instead.');
+        console.warn(".dampingFactor has been deprecated. use smoothTime (in seconds) instead.");
         return 0;
     }
     /**
@@ -2481,7 +2623,7 @@ class CameraControls extends EventDispatcher {
      * @category Properties
      */
     set dampingFactor(_) {
-        console.warn('.dampingFactor has been deprecated. use smoothTime (in seconds) instead.');
+        console.warn(".dampingFactor has been deprecated. use smoothTime (in seconds) instead.");
     }
     /**
      * backward compatible
@@ -2489,7 +2631,7 @@ class CameraControls extends EventDispatcher {
      * @category Properties
      */
     get draggingDampingFactor() {
-        console.warn('.draggingDampingFactor has been deprecated. use draggingSmoothTime (in seconds) instead.');
+        console.warn(".draggingDampingFactor has been deprecated. use draggingSmoothTime (in seconds) instead.");
         return 0;
     }
     /**
@@ -2498,7 +2640,7 @@ class CameraControls extends EventDispatcher {
      * @category Properties
      */
     set draggingDampingFactor(_) {
-        console.warn('.draggingDampingFactor has been deprecated. use draggingSmoothTime (in seconds) instead.');
+        console.warn(".draggingDampingFactor has been deprecated. use draggingSmoothTime (in seconds) instead.");
     }
     static createBoundingSphere(object3d, out = new THREE.Sphere()) {
         const boundingSphere = out;
@@ -2520,7 +2662,8 @@ class CameraControls extends EventDispatcher {
             const geometry = mesh.geometry.clone();
             geometry.applyMatrix4(mesh.matrixWorld);
             const bufferGeometry = geometry;
-            const position = bufferGeometry.attributes.position;
+            const position = bufferGeometry.attributes
+                .position;
             for (let i = 0, l = position.count; i < l; i++) {
                 _v3A.fromBufferAttribute(position, i);
                 maxRadiusSq = Math.max(maxRadiusSq, center.distanceToSquared(_v3A));

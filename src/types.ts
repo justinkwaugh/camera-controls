@@ -44,7 +44,7 @@ export const ACTION = Object.freeze({
   TOUCH_ZOOM_TRUCK: 8192,
   TOUCH_ZOOM_OFFSET: 16384,
   TOUCH_ZOOM_ROTATE: 32768,
-  TOUCH_CUSTOM: 65536,
+  CUSTOM: 65536,
 } as const);
 
 // Bit OR of Action
@@ -65,7 +65,8 @@ type mouseButtonAction =
   | typeof ACTION.OFFSET
   | typeof ACTION.DOLLY
   | typeof ACTION.ZOOM
-  | typeof ACTION.NONE;
+  | typeof ACTION.NONE
+  | typeof ACTION.CUSTOM;
 type mouseWheelAction =
   | typeof ACTION.ROTATE
   | typeof ACTION.TRUCK
@@ -80,7 +81,7 @@ type singleTouchAction =
   | typeof ACTION.DOLLY
   | typeof ACTION.ZOOM
   | typeof ACTION.NONE
-  | typeof ACTION.TOUCH_CUSTOM;
+  | typeof ACTION.CUSTOM;
 type multiTouchAction =
   | typeof ACTION.TOUCH_DOLLY_ROTATE
   | typeof ACTION.TOUCH_DOLLY_TRUCK

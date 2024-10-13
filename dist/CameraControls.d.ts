@@ -1,47 +1,47 @@
-import * as _THREE from 'three';
-import { THREESubset, Ref, MOUSE_BUTTON, ACTION, DOLLY_DIRECTION, PointerInput, MouseButtons, Touches, FitToOptions, CameraControlsEventMap } from './types';
-import { EventDispatcher } from './EventDispatcher';
+import * as _THREE from "three";
+import { THREESubset, Ref, MOUSE_BUTTON, ACTION, DOLLY_DIRECTION, PointerInput, MouseButtons, Touches, FitToOptions, CameraControlsEventMap } from "./types";
+import { EventDispatcher } from "./EventDispatcher";
 export declare class CameraControls extends EventDispatcher {
     /**
-     * Injects THREE as the dependency. You can then proceed to use CameraControls.
-     *
-     * e.g
-     * ```javascript
-     * CameraControls.install( { THREE: THREE } );
-     * ```
-     *
-     * Note: If you do not wish to use enter three.js to reduce file size(tree-shaking for example), make a subset to install.
-     *
-     * ```js
-     * import {
-     * 	Vector2,
-     * 	Vector3,
-     * 	Vector4,
-     * 	Quaternion,
-     * 	Matrix4,
-     * 	Spherical,
-     * 	Box3,
-     * 	Sphere,
-     * 	Raycaster,
-     * 	MathUtils,
-     * } from 'three';
-     *
-     * const subsetOfTHREE = {
-     * 	Vector2   : Vector2,
-     * 	Vector3   : Vector3,
-     * 	Vector4   : Vector4,
-     * 	Quaternion: Quaternion,
-     * 	Matrix4   : Matrix4,
-     * 	Spherical : Spherical,
-     * 	Box3      : Box3,
-     * 	Sphere    : Sphere,
-     * 	Raycaster : Raycaster,
-     * };
-
-     * CameraControls.install( { THREE: subsetOfTHREE } );
-     * ```
-     * @category Statics
-     */
+       * Injects THREE as the dependency. You can then proceed to use CameraControls.
+       *
+       * e.g
+       * ```javascript
+       * CameraControls.install( { THREE: THREE } );
+       * ```
+       *
+       * Note: If you do not wish to use enter three.js to reduce file size(tree-shaking for example), make a subset to install.
+       *
+       * ```js
+       * import {
+       * 	Vector2,
+       * 	Vector3,
+       * 	Vector4,
+       * 	Quaternion,
+       * 	Matrix4,
+       * 	Spherical,
+       * 	Box3,
+       * 	Sphere,
+       * 	Raycaster,
+       * 	MathUtils,
+       * } from 'three';
+       *
+       * const subsetOfTHREE = {
+       * 	Vector2   : Vector2,
+       * 	Vector3   : Vector3,
+       * 	Vector4   : Vector4,
+       * 	Quaternion: Quaternion,
+       * 	Matrix4   : Matrix4,
+       * 	Spherical : Spherical,
+       * 	Box3      : Box3,
+       * 	Sphere    : Sphere,
+       * 	Raycaster : Raycaster,
+       * };
+  
+       * CameraControls.install( { THREE: subsetOfTHREE } );
+       * ```
+       * @category Statics
+       */
     static install(libs: {
         THREE: THREESubset;
     }): void;
@@ -583,7 +583,7 @@ export declare class CameraControls extends EventDispatcher {
      * @returns Transition end promise
      * @category Methods
      */
-    fitToBox(box3OrObject: _THREE.Box3 | _THREE.Object3D, enableTransition: boolean, { cover, paddingLeft, paddingRight, paddingBottom, paddingTop }?: Partial<FitToOptions>): Promise<void[]>;
+    fitToBox(box3OrObject: _THREE.Box3 | _THREE.Object3D, enableTransition: boolean, { cover, paddingLeft, paddingRight, paddingBottom, paddingTop, }?: Partial<FitToOptions>): Promise<void[]>;
     /**
      * Fit the viewport to the sphere or the bounding sphere of the object.
      * @param sphereOrMesh

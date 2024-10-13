@@ -1,4 +1,4 @@
-import * as _THREE from 'three';
+import * as _THREE from "three";
 export interface THREESubset {
     Vector2: typeof _THREE.Vector2;
     Vector3: typeof _THREE.Vector3;
@@ -19,7 +19,7 @@ export declare const MOUSE_BUTTON: {
     readonly RIGHT: 2;
     readonly MIDDLE: 4;
 };
-export type MOUSE_BUTTON = typeof MOUSE_BUTTON[keyof typeof MOUSE_BUTTON];
+export type MOUSE_BUTTON = (typeof MOUSE_BUTTON)[keyof typeof MOUSE_BUTTON];
 export declare const ACTION: Readonly<{
     readonly NONE: 0;
     readonly ROTATE: 1;
@@ -38,7 +38,7 @@ export declare const ACTION: Readonly<{
     readonly TOUCH_ZOOM_TRUCK: 8192;
     readonly TOUCH_ZOOM_OFFSET: 16384;
     readonly TOUCH_ZOOM_ROTATE: 32768;
-    readonly TOUCH_CUSTOM: 65536;
+    readonly CUSTOM: 65536;
 }>;
 export type ACTION = number;
 export interface PointerInput {
@@ -49,9 +49,9 @@ export interface PointerInput {
     deltaY: number;
     mouseButton: MOUSE_BUTTON | null;
 }
-type mouseButtonAction = typeof ACTION.ROTATE | typeof ACTION.TRUCK | typeof ACTION.OFFSET | typeof ACTION.DOLLY | typeof ACTION.ZOOM | typeof ACTION.NONE;
+type mouseButtonAction = typeof ACTION.ROTATE | typeof ACTION.TRUCK | typeof ACTION.OFFSET | typeof ACTION.DOLLY | typeof ACTION.ZOOM | typeof ACTION.NONE | typeof ACTION.CUSTOM;
 type mouseWheelAction = typeof ACTION.ROTATE | typeof ACTION.TRUCK | typeof ACTION.OFFSET | typeof ACTION.DOLLY | typeof ACTION.ZOOM | typeof ACTION.NONE;
-type singleTouchAction = typeof ACTION.TOUCH_ROTATE | typeof ACTION.TOUCH_TRUCK | typeof ACTION.TOUCH_OFFSET | typeof ACTION.DOLLY | typeof ACTION.ZOOM | typeof ACTION.NONE;
+type singleTouchAction = typeof ACTION.TOUCH_ROTATE | typeof ACTION.TOUCH_TRUCK | typeof ACTION.TOUCH_OFFSET | typeof ACTION.DOLLY | typeof ACTION.ZOOM | typeof ACTION.NONE | typeof ACTION.CUSTOM;
 type multiTouchAction = typeof ACTION.TOUCH_DOLLY_ROTATE | typeof ACTION.TOUCH_DOLLY_TRUCK | typeof ACTION.TOUCH_DOLLY_OFFSET | typeof ACTION.TOUCH_ZOOM_ROTATE | typeof ACTION.TOUCH_ZOOM_TRUCK | typeof ACTION.TOUCH_ZOOM_OFFSET | typeof ACTION.TOUCH_DOLLY | typeof ACTION.TOUCH_ZOOM | typeof ACTION.TOUCH_ROTATE | typeof ACTION.TOUCH_TRUCK | typeof ACTION.TOUCH_OFFSET | typeof ACTION.NONE;
 export interface MouseButtons {
     left: mouseButtonAction;
@@ -69,7 +69,7 @@ export declare const DOLLY_DIRECTION: {
     readonly IN: 1;
     readonly OUT: -1;
 };
-export type DOLLY_DIRECTION = typeof DOLLY_DIRECTION[keyof typeof DOLLY_DIRECTION];
+export type DOLLY_DIRECTION = (typeof DOLLY_DIRECTION)[keyof typeof DOLLY_DIRECTION];
 export interface FitToOptions {
     cover: boolean;
     paddingLeft: number;
@@ -79,28 +79,28 @@ export interface FitToOptions {
 }
 export interface CameraControlsEventMap {
     update: {
-        type: 'update';
+        type: "update";
     };
     wake: {
-        type: 'wake';
+        type: "wake";
     };
     rest: {
-        type: 'rest';
+        type: "rest";
     };
     sleep: {
-        type: 'sleep';
+        type: "sleep";
     };
     transitionstart: {
-        type: 'transitionstart';
+        type: "transitionstart";
     };
     controlstart: {
-        type: 'controlstart';
+        type: "controlstart";
     };
     control: {
-        type: 'control';
+        type: "control";
     };
     controlend: {
-        type: 'controlend';
+        type: "controlend";
     };
 }
 export declare function isPerspectiveCamera(camera: _THREE.Camera): camera is _THREE.PerspectiveCamera;
