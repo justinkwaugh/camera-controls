@@ -1,4 +1,4 @@
-import pkg from './package.json' assert { type: 'json' };
+import pkg from './package.json' with { type: 'json' };
 import rollupReplace from '@rollup/plugin-replace';
 import rollupTypescript from '@rollup/plugin-typescript';
 import typescript from 'typescript';
